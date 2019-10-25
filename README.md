@@ -12,6 +12,8 @@ only on specific folders.
 
 ## Installation
 
+`ts-incremental-strict-mode` supports at least Node 8 and above.
+
 npm
 
 ```sh
