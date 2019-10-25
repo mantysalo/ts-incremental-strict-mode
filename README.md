@@ -46,7 +46,13 @@ exclude fields in tsconfig.
 Type check all files within `src` folder and it's subfolders
 
 ```sh
-yarn ts-incremental-strict-mode 'src/**/*'
+yarn ts-incremental-strict-mode 'src'
+```
+
+You can exclude folders with a negation pattern
+
+```sh
+yarn ts-incremental-strict-mode 'src' '!**/__tests__'
 ```
 
 ### Disable checks
