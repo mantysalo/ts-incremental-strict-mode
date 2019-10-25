@@ -12,6 +12,7 @@
   "scripts": {
     "test": "jest",
     "build": "tsc",
+    "prepublish": "tsc",
     "ts-incremental-strict-mode": "ts-node src/main.ts"
   },
   "author": "Riku Mäntysalo",
