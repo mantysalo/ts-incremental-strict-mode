@@ -2,9 +2,6 @@
 
 > Enable TypeScript strict mode in your project incrementally!
 
-[![NPM Version][npm-image]][npm-url]
-[![Build Status][travis-image]][travis-url]
-[![Commitizen friendly][commitizen-image]][commitizen-url]
 
 Enabling TypeScript strict mode in a project where it has not been enforced
 can be a painful task.
