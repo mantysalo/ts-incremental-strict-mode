@@ -1,9 +1,9 @@
-import { baseConfig } from '../baseConfig';
+import { generateTempConfig } from '../baseConfig';
 
-describe('baseConfig', () => {
+describe('generateTempConfig', () => {
     it('creates a valid tsconfig', () => {
-        expect(baseConfig('./tsconfig.json', ['file1.ts'])).toEqual(
-            '{"extends":"./tsconfig.json","include":["file1.ts"]}'
+        expect(generateTempConfig('./tsconfig.json', ['file1.ts'])).toEqual(
+            '{"extends":"./tsconfig.json","files":["file1.ts"]}'
         );
     });
 });

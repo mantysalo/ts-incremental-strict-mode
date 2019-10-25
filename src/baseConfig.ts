@@ -1,8 +1,8 @@
 import { FilePath } from './cli';
 
-export const baseConfig = (existingConfigPath: FilePath, files: FilePath[]): string => {
+export const generateTempConfig = (existingConfigPath: FilePath, files: FilePath[]): string => {
     return JSON.stringify({
         extends: existingConfigPath,
-        include: files
+        files
     });
 };

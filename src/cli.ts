@@ -4,7 +4,7 @@ import globby from 'globby';
 import tempy from 'tempy';
 import path from 'path';
 import fs from 'fs';
-import { baseConfig } from './baseConfig';
+import { generateTempConfig } from './baseConfig';
 
 export type FilePath = string;
 
@@ -49,23 +49,20 @@ export const createTempTSConfig = async (
     files: FilePath[],
     configPath?: FilePath
 ): Promise<FilePath | undefined> => {
-    const tempConfigFile = tempy.file({ name: 'tsconfig.json' });
+    const tempConfigFilePath = tempy.file({ name: 'tsconfig.json' });
     const writeFileCallback = (error: NodeJS.ErrnoException | null): void => {
         if (error) {
             throw new Error('Failed to create a temporary tsconfig!');
         }
     };
-    const mainTSConfigPath = await getTSConfig(configPath);
-    if (mainTSConfigPath) {
-        const relativeMainTSConfigPath = path.relative(tempConfigFile, mainTSConfigPath);
-        fs.writeFile(
-            tempConfigFile,
-            baseConfig(relativeMainTSConfigPath, getAbsoluteFilePaths(files)),
-            writeFileCallback
-        );
-        return tempConfigFile;
-    }
-    throw new Error('Failed to create a temporary tsconfig!');
+    const tsConfigPath = await getTSConfig(configPath);
+    const relativeTSConfigPath = path.relative(tempConfigFilePath, tsConfigPath);
+    fs.writeFile(
+        tempConfigFilePath,
+        generateTempConfig(relativeTSConfigPath, getAbsoluteFilePaths(await globby(files))),
+        writeFileCallback
+    );
+    return tempConfigFilePath;
 };
 
 // Runs the typescript compiler using the temporary configuration
@@ -79,7 +76,7 @@ export const typeCheck = async (
     try {
         const tempConfigPath = await createTempTSConfig(files, configPath);
         if (tempConfigPath) {
-            const filePaths = await globby(getAbsoluteFilePaths(files));
+            const filePaths = getAbsoluteFilePaths(await globby(files));
             if (verboseMode) {
                 console.log('Type checking:');
                 filePaths.forEach(file => console.log(file));
