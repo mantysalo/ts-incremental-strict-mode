@@ -51,4 +51,13 @@ describe('typeCheck', () => {
 
         expect(consoleLogs).toContain(absolutePaths[0] && absolutePaths[1]);
     });
+
+    it('works with a specified config path', async () => {
+        await typeCheck(
+            ['--strict'],
+            ['src/__tests__/testfiles/test.ts'],
+            false,
+            './tsconfig.json'
+        );
+    });
 });
