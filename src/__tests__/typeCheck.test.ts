@@ -1,4 +1,5 @@
 import { typeCheck } from '../cli';
+import { resolve } from 'path';
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const originalLog = console.log;
@@ -31,5 +32,25 @@ describe('typeCheck', () => {
         // console.log for 'Typechecking:'
         // console.log for test.ts path
         expect(consoleLogSpy).toBeCalledTimes(3);
+    });
+
+    it('type checks files specified with glob', async () => {
+        const consoleLogs: string[] = [];
+        const consoleLogSpy = jest.spyOn(console, 'log');
+        consoleLogSpy.mockImplementation((input: string) => consoleLogs.push(input));
+
+        const filesToCheck = [
+            'src/__tests__/testfiles/glob/foo/test.ts',
+            'src/__tests__/testfiles/glob/foo/bar/test.ts'
+        ];
+        const absolutePaths = filesToCheck.map(path => resolve(path));
+
+        await typeCheck(
+            ['--strict'],
+            ['src/__tests__/testfiles/glob', '!src/__tests__/testfiles/glob/foo/bar/baz'],
+            true
+        );
+
+        expect(consoleLogs).toContain(absolutePaths[0] && absolutePaths[1]);
     });
 });
