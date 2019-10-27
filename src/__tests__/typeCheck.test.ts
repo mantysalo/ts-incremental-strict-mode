@@ -28,9 +28,7 @@ describe('typeCheck', () => {
     it('console logs files to be typechecked in verbose mode', async () => {
         const consoleLogSpy = jest.spyOn(console, 'log');
         await typeCheck(['--strict'], ['src/__tests__/testfiles/test.ts'], true);
-        // console.log for tsconfig path
-        // console.log for 'Typechecking:'
-        // console.log for test.ts path
+        // console.logs for tsconfig path, 'Typechecking:' and test.ts path
         expect(consoleLogSpy).toBeCalledTimes(3);
     });
 
