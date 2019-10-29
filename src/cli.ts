@@ -22,11 +22,7 @@ export const resolveTSConfig = async (): Promise<string> => {
 
 export const getTSConfig = async (configPath?: FilePath): Promise<FilePath> => {
     if (configPath) {
-        fs.access(configPath, err => {
-            if (err) {
-                throw err;
-            }
-        });
+        fs.accessSync(configPath);
         return configPath;
     } else {
         return await resolveTSConfig();
