@@ -14,7 +14,6 @@ const logTSConfigPath = (tsConfigPath: FilePath): void =>
 export const resolveTSConfig = async (): Promise<string> => {
     const resolvedConfigPath = await findUp('tsconfig.json');
     if (resolvedConfigPath) {
-        logTSConfigPath(resolvedConfigPath);
         return resolvedConfigPath;
     } else {
         throw new Error('Could not find a tsconfig.json!');
@@ -27,7 +26,6 @@ export const getTSConfig = async (configPath?: FilePath): Promise<FilePath> => {
             if (err) {
                 throw err;
             }
-            logTSConfigPath(configPath);
         });
         return configPath;
     } else {
@@ -56,6 +54,7 @@ export const createTempTSConfig = async (
         }
     };
     const tsConfigPath = await getTSConfig(configPath);
+    logTSConfigPath(tsConfigPath);
     const relativeTSConfigPath = path.relative(tempConfigFilePath, tsConfigPath);
     fs.writeFile(
         tempConfigFilePath,
