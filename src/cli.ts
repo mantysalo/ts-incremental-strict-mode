@@ -37,7 +37,7 @@ export const getTSConfig = async (configPath?: FilePath): Promise<FilePath> => {
 // Gets absolute paths for the files supplied via CLI
 // Example: ts-incremental-strict-mode src/file1.ts
 // Returns absolute path for file1.ts
-const getAbsoluteFilePaths = (files: FilePath[]): FilePath[] => {
+export const getAbsoluteFilePaths = (files: FilePath[]): FilePath[] => {
     return files.map(filename => path.resolve(filename));
 };
 

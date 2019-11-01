@@ -1,5 +1,5 @@
 {
   "extends": "./tsconfig",
-  "include": ["src"],
+  "include": ["src", "__mocks__"],
   "exclude": []
 }
