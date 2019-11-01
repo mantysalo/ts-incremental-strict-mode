@@ -51,7 +51,7 @@ Type check all files within `src` folder and it's subfolders
 yarn ts-incremental-strict-mode 'src'
 ```
 
-You can exclude folders with a negation pattern
+You can exclude folders with a negation patter
 
 ```sh
 yarn ts-incremental-strict-mode 'src' '!**/__tests__'
