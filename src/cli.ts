@@ -11,6 +11,11 @@ export type FilePath = string;
 const consoleLogTSConfigPath = (tsConfigPath: FilePath): void =>
     console.log(`Using tsconfig from ${tsConfigPath}`);
 
+const consoleLogFilesToBeChecked = (filePaths: FilePath[]): void => {
+    console.log('Type checking:');
+    filePaths.forEach(file => console.log(file));
+};
+
 export const resolveTSConfig = async (): Promise<string> => {
     const resolvedConfigPath = await findUp('tsconfig.json');
     if (resolvedConfigPath) {
@@ -73,8 +78,7 @@ export const typeCheck = async (
         if (tempConfigPath) {
             const filePaths = getAbsoluteFilePaths(await globby(files));
             if (verboseMode) {
-                console.log('Type checking:');
-                filePaths.forEach(file => console.log(file));
+                consoleLogFilesToBeChecked(filePaths);
             }
             await execa('tsc', [...tscArgs, '--noEmit', '--project', tempConfigPath], {
                 all: true
