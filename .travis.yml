@@ -10,9 +10,12 @@ node_js:
   - 8
 install:
   - yarn
+  - yarn add codecov
 script:
   - yarn prettier --check './{src,__mocks__}/**'
   - yarn eslint './{src,__mocks__}/**'
-  - yarn test
+  - yarn jest --coverage
   - yarn build
+after_success:
+  - yarn codecov
 
