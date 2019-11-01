@@ -8,7 +8,7 @@ import { generateTempConfig } from './baseConfig';
 
 export type FilePath = string;
 
-const logTSConfigPath = (tsConfigPath: FilePath): void =>
+const consoleLogTSConfigPath = (tsConfigPath: FilePath): void =>
     console.log(`Using tsconfig from ${tsConfigPath}`);
 
 export const resolveTSConfig = async (): Promise<string> => {
@@ -50,7 +50,7 @@ export const createTempTSConfig = async (
         }
     };
     const tsConfigPath = await getTSConfig(configPath);
-    logTSConfigPath(tsConfigPath);
+    consoleLogTSConfigPath(tsConfigPath);
     const relativeTSConfigPath = path.relative(tempConfigFilePath, tsConfigPath);
     fs.writeFile(
         tempConfigFilePath,
