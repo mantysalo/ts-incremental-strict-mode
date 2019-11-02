@@ -2,6 +2,7 @@
 
 > Enable TypeScript strict mode in your project incrementally!
 
+[![codecov](https://codecov.io/gh/RikuMantysalo/ts-incremental-strict-mode/branch/master/graph/badge.svg?token=cqjkqa8bw6)](https://codecov.io/gh/RikuMantysalo/ts-incremental-strict-mode)
 
 Enabling TypeScript strict mode in a project where it has not been enforced
 can be a painful task.
