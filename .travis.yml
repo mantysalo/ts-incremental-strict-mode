@@ -13,14 +13,13 @@ install:
   - yarn add codecov
 
 jobs:
-include:
-  - stage: test
-    name: "Prettier/Lint/Test"
-    script:
-      - yarn prettier --check './{src,__mocks__}/**'
-      - yarn eslint './{src,__mocks__}/**'
-      - yarn jest --coverage
-  - stage: test
+  include:
+    - stage: test
+      name: "Prettier/Lint/Test"
+      script:
+        - yarn prettier --check './{src,__mocks__}/**'
+        - yarn eslint './{src,__mocks__}/**'
+        - yarn jest --coverage
     - stage: build
       name: "Build"
       script:
