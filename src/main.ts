@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { typeCheck } from './cli';
 import { parseArgs } from './parseArgs';
 import chalk from 'chalk';
