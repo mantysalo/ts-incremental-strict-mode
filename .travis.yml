@@ -11,11 +11,13 @@ node_js:
 install:
   - yarn
   - yarn add codecov
-script:
-  - yarn prettier --check './{src,__mocks__}/**'
-  - yarn eslint './{src,__mocks__}/**'
-  - yarn jest --coverage
-  - yarn build
+jobs:
+  include:
+    - stage: test
+    script: yarn prettier --check './{src,__mocks__}/**'
+    script: yarn eslint './{src,__mocks__}/**'
+    script: yarn jest --coverage
+    script: yarn build
 after_success:
   - yarn codecov
 
