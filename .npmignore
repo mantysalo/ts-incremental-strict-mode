@@ -1,0 +1,11 @@
+src/
+.prettierrc
+.travis.yml
+jest.config.js
+tsconfig.eslint.json
+tsconfig.json
+tsconfig.test.json
+.eslintrc
+.eslintignore
+__mocks__/
+coverage/
