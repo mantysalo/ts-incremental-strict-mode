@@ -1,7 +1,7 @@
 import execa from 'execa';
 import findUp from 'find-up';
 import globby from 'globby';
-import tempy from 'tempy';
+import crypto from 'crypto';
 import path from 'path';
 import fs from 'fs';
 import { generateTempConfig } from './baseConfig';
@@ -28,7 +28,7 @@ export const resolveTSConfig = async (): Promise<string> => {
 export const getTSConfig = async (configPath?: FilePath): Promise<FilePath> => {
     if (configPath) {
         fs.accessSync(configPath);
-        return configPath;
+        return path.resolve(configPath);
     } else {
         return await resolveTSConfig();
     }
@@ -48,7 +48,11 @@ export const createTempTSConfig = async (
     files: FilePath[],
     configPath?: FilePath
 ): Promise<FilePath | undefined> => {
-    const tempConfigFilePath = tempy.file({ name: 'tsconfig.json' });
+    const tempConfigFileName = crypto.randomBytes(8).toString('hex') + 'tsconfig.temp.json';
+    const tempConfigFilePath = configPath
+        ? `${path.posix.dirname(configPath)}/${tempConfigFileName}`
+        : tempConfigFileName;
+    console.log(tempConfigFilePath);
     const writeFileCallback = (error: NodeJS.ErrnoException | null): void => {
         if (error) {
             throw new Error('Failed to create a temporary tsconfig!');
@@ -56,13 +60,16 @@ export const createTempTSConfig = async (
     };
     const tsConfigPath = await getTSConfig(configPath);
     consoleLogTSConfigPath(tsConfigPath);
-    const relativeTSConfigPath = path.relative(tempConfigFilePath, tsConfigPath);
     fs.writeFile(
         tempConfigFilePath,
-        generateTempConfig(relativeTSConfigPath, getAbsoluteFilePaths(await globby(files))),
+        generateTempConfig(tsConfigPath, getAbsoluteFilePaths(await globby(files))),
         writeFileCallback
     );
     return tempConfigFilePath;
+};
+
+const cleanUp = (filePath: FilePath): void => {
+    fs.unlinkSync(filePath);
 };
 
 // Runs the typescript compiler using the temporary configuration
@@ -73,8 +80,8 @@ export const typeCheck = async (
     verboseMode: boolean,
     configPath?: FilePath
 ): Promise<void> => {
+    const tempConfigPath = await createTempTSConfig(files, configPath);
     try {
-        const tempConfigPath = await createTempTSConfig(files, configPath);
         if (tempConfigPath) {
             const filePaths = getAbsoluteFilePaths(await globby(files));
             if (verboseMode) {
@@ -90,5 +97,9 @@ export const typeCheck = async (
             throw new Error(all);
         }
         throw error;
+    } finally {
+        if (tempConfigPath) {
+            cleanUp(tempConfigPath);
+        }
     }
 };
