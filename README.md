@@ -102,6 +102,18 @@ yarn ts-incremental-strict-mode --config <path to custom tsconfig> <file paths>
 | config                       | filepath | Path to your tsconfig file. If not specified, ts-incremental-strict-mode will try to resolve a tsconfig.json file in the directory you run ts-incremental-strict-mode. If not found it will move to the directory above until it finds a tsconfig.          |
 | verbose                      | boolean  | Output the files to be type checked in to console. Useful for testing glob patterns. Default value `false`                                                                                                                              |
 
+## Troubleshooting
+
+### I'm getting an error about missing types
+
+`ts-incremental-strict-mode` works by creating a temporary tsconfig, and uses the files you specified in the files property. If you have defined types, you need to add them to your tsconfig or include them in your command.
+
+For example with create-react-app, you would run
+
+```sh
+yarn ts-incremental-strict-mode src/index.tsx src/react-app-env.d.ts
+```
+
 ## Development setup
 
 Getting started with development of `ts-incremental-strict-mode` is quite straightforward.
