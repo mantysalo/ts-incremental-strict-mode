@@ -1,7 +1,6 @@
 import * as CLI from '../cli';
 import execa from 'execa';
 jest.mock('execa');
-
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const originalLog = console.log;
 describe('typeCheck', () => {
@@ -11,8 +10,9 @@ describe('typeCheck', () => {
 
     // eslint-disable-next-line @typescript-eslint/unbound-method
     afterEach(() => (console.log = originalLog));
-    const createTempTSConfigSpy = jest.spyOn(CLI, 'createTempTSConfig');
-    createTempTSConfigSpy.mockImplementation(() => {
+
+    jest.spyOn(CLI, 'cleanUp').mockImplementation(jest.fn());
+    jest.spyOn(CLI, 'createTempTSConfig').mockImplementation(() => {
         console.log('using tsconfig from path');
         return Promise.resolve('test');
     });
@@ -28,11 +28,11 @@ describe('typeCheck', () => {
     });
 
     it('console logs files to be typechecked in verbose mode', async () => {
-        const consoleLogSpy = jest.spyOn(console, 'log');
-        const getAbsoluteFilePathsSpy = jest.spyOn(CLI, 'getAbsoluteFilePaths');
-        getAbsoluteFilePathsSpy.mockImplementation(() => ['testpath']);
         const consoleLogs: string[] = [];
-        consoleLogSpy.mockImplementation(input => consoleLogs.push(input));
+        const consoleLogSpy = jest
+            .spyOn(console, 'log')
+            .mockImplementation(input => consoleLogs.push(input));
+        jest.spyOn(CLI, 'getAbsoluteFilePaths').mockImplementation(() => ['testpath']);
         await CLI.typeCheck(['--strict'], ['src/__tests__/testfiles/test.ts'], true);
         // 'using tsconfig from path','Typechecking:' and testpath from the mock
         expect(consoleLogSpy).toBeCalledTimes(3);

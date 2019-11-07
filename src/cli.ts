@@ -68,7 +68,7 @@ export const createTempTSConfig = async (
     return tempConfigFilePath;
 };
 
-const cleanUp = (filePath: FilePath): void => {
+export const cleanUp = (filePath: FilePath): void => {
     fs.unlinkSync(filePath);
 };
 
