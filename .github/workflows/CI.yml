@@ -1,0 +1,29 @@
+name: Node CI
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [8, 10, 12, 13]
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: npm install, build, and test
+      run: |
+        yarn
+        yarn add codecov
+        yarn prettier --check './{src,__mocks__}/**'
+        yarn eslint './{src,__mocks__}/**'
+        yarn jest --coverage
+        yarn build
+    - name: codecoverage
+      if: matrix.node-version == 12.x
+      env:
+        CI: true
