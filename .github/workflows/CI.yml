@@ -18,12 +18,19 @@ jobs:
     - name: npm install, build, and test
       run: |
         yarn
+        yarn prettier --check './{src,__mocks__}/**'
+        yarn eslint './{src,__mocks__}/**'
+        yarn jest
+        yarn build
+    - name: codecoverage
+      if: matrix.node-version == 12.x
+      run: |
+        yarn
         yarn add codecov
         yarn prettier --check './{src,__mocks__}/**'
         yarn eslint './{src,__mocks__}/**'
         yarn jest --coverage
+        yarn codecov
         yarn build
-    - name: codecoverage
-      if: matrix.node-version == 12.x
       env:
         CI: true
