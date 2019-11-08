@@ -26,3 +26,4 @@ jobs:
         yarn build
       env:
         CI: true
+        CODECOV_TOKEN: ${{secrets.CODECOV_TOKEN}}
