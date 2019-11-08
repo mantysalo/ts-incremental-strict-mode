@@ -1,9 +1,8 @@
 import { createTempTSConfig } from '../cli';
-
-const regExForFilePath = /^\/([A-z0-9-_+]+\/)*(tsconfig+\.(json))$/gm;
-
+import fs from 'fs';
 describe('createTempTSConfig', () => {
     it('creates a temporary tsconfig', async () => {
-        expect(await createTempTSConfig(['file1.ts', 'file2.ts'])).toMatch(regExForFilePath);
+        jest.spyOn(fs, 'writeFile').mockImplementation(() => {});
+        expect(await createTempTSConfig(['file1.ts', 'file2.ts'])).toContain('tsconfig.temp.json');
     });
 });
