@@ -27,3 +27,6 @@ deploy:
     tags: true
     repo: RikuMantysalo/ts-incremental-strict-mode
     branch: master
+branches:
+  only: 
+    - master
