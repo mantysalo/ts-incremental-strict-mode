@@ -22,8 +22,12 @@ jobs:
         yarn prettier --check './{src,__mocks__}/**'
         yarn eslint './{src,__mocks__}/**'
         yarn jest --coverage
-        yarn codecov
         yarn build
+    - name: send codecov report
+      if: matrix.node-version = 12
+      run: |
+        yarn add codecov
+        yarn codecov
       env:
         CI: true
         CODECOV_TOKEN: ${{secrets.CODECOV_TOKEN}}
