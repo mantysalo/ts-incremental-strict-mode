@@ -21,7 +21,6 @@ jobs:
     - name: npm install, build, and test
       run: |
         yarn
-        yarn add codecov
         yarn prettier --check './{src,__mocks__}/**'
         yarn eslint './{src,__mocks__}/**'
         yarn jest --coverage
