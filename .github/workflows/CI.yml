@@ -1,5 +1,8 @@
 name: Node CI
-on: push
+on: 
+  push:
+    branches-ignore:
+      - master
 
 jobs:
   build:
@@ -15,17 +18,26 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - name: npm install, build, and test
+    - uses: actions/cache@v1
+      with:
+        path: ~/.cache/yarn
+        key: ${{ runner.os }}-yarn-${{ hashFiles(format('{0}{1}', github.workspace, '/yarn.lock')) }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+    - name: install dependencies
+      run: yarn
+    - name: build and test other node versions
+      if: matrix.node-version != 12
       run: |
-        yarn
-        yarn add codecov
+        yarn jest
+        yarn build
+    - name: lint, test and build on node 12
+      if: matrix.node-version == 12
+      run: |
         yarn prettier --check './{src,__mocks__}/**'
         yarn eslint './{src,__mocks__}/**'
         yarn jest --coverage
         yarn build
-    - name: send codecov report
-      if: matrix.node-version == 12
-      run: |
         yarn add codecov
         yarn codecov
       env:
