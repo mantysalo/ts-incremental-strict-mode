@@ -2,7 +2,7 @@ import execa from 'execa';
 import globby from 'globby';
 import path from 'path';
 import fs from 'fs';
-import { Config } from './Config';
+import { Config } from './Config/Config';
 
 export type FilePath = string;
 

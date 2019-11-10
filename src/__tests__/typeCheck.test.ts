@@ -1,6 +1,14 @@
 import * as CLI from '../cli';
 import execa from 'execa';
 jest.mock('execa');
+jest.mock('../Config/Config.ts', () => ({
+    Config: class {
+        public createTempTSConfig = async (): Promise<string> => {
+            console.log('using tsconfig from path');
+            return Promise.resolve('test');
+        };
+    }
+}));
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const originalLog = console.log;
 describe('typeCheck', () => {
@@ -12,11 +20,6 @@ describe('typeCheck', () => {
     afterEach(() => (console.log = originalLog));
 
     jest.spyOn(CLI, 'cleanUp').mockImplementation(jest.fn());
-    jest.spyOn(CLI, 'createTempTSConfig').mockImplementation(() => {
-        console.log('using tsconfig from path');
-        return Promise.resolve('test');
-    });
-
     it('type checks specified file', async () => {
         // Required for this mock to work
         // eslint-disable-next-line @typescript-eslint/no-explicit-any

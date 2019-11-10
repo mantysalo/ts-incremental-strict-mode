@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import path from 'path';
 import fs from 'fs';
-import { FilePath, getAbsoluteFilePaths } from './cli';
+import { FilePath, getAbsoluteFilePaths } from '../cli';
 import findUp = require('find-up');
 import globby = require('globby');
 
