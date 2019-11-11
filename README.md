@@ -43,6 +43,14 @@ yarn ts-incremental-strict-mode <file paths>
 yarn ts-incremental-strict-mode --help
 ```
 
+### With lint-staged
+
+```
+"lint-staged": {
+    "*{ts,tsx}": ["ts-incremental-strict-mode"]
+}
+```
+
 ### Glob patterns
 
 `ts-incremental-strict-mode` supports same glob syntax as the include and
@@ -80,14 +88,6 @@ If you have a tsconfig with a special name or you need to specify a configuratio
 
 ```sh
 yarn ts-incremental-strict-mode --config <path to custom tsconfig> <file paths>
-```
-
-### With lint-staged
-
-```
-"lint-staged": {
-    "*{ts,tsx}": ["ts-incremental-strict-mode"]
-}
 ```
 
 ## Options
