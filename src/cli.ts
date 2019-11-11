@@ -6,11 +6,6 @@ import { Config } from './Config/Config';
 
 export type FilePath = string;
 
-const consoleLogFilesToBeChecked = (filePaths: FilePath[]): void => {
-    console.log('Type checking:');
-    filePaths.forEach(file => console.log(file));
-};
-
 // Gets absolute paths for the files supplied via CLI
 // Example: ts-incremental-strict-mode src/file1.ts
 // Returns absolute path for file1.ts
@@ -32,7 +27,8 @@ export const typeCheck = async (
         if (tempConfigPath) {
             const filePaths = getAbsoluteFilePaths(await globby(files));
             if (verboseMode) {
-                consoleLogFilesToBeChecked(filePaths);
+                console.log('Type checking:');
+                filePaths.forEach(file => console.log(file));
             }
             await execa('tsc', [...tscArgs, '--noEmit', '--project', tempConfigPath], {
                 all: true
