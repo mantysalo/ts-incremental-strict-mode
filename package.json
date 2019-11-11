@@ -1,6 +1,6 @@
 {
   "name": "ts-incremental-strict-mode",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "repository": "github:rikumantysalo/ts-incremental-strict-mode",
   "engines": {
     "node": ">=8.10.0"
