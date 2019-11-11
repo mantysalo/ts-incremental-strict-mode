@@ -1,37 +1,14 @@
 import execa from 'execa';
-import findUp from 'find-up';
 import globby from 'globby';
-import crypto from 'crypto';
 import path from 'path';
 import fs from 'fs';
-import { generateTempConfig } from './baseConfig';
+import { Config } from './Config/Config';
 
 export type FilePath = string;
-
-const consoleLogTSConfigPath = (tsConfigPath: FilePath): void =>
-    console.log(`Using tsconfig from ${tsConfigPath}`);
 
 const consoleLogFilesToBeChecked = (filePaths: FilePath[]): void => {
     console.log('Type checking:');
     filePaths.forEach(file => console.log(file));
-};
-
-export const resolveTSConfig = async (): Promise<string> => {
-    const resolvedConfigPath = await findUp('tsconfig.json');
-    if (resolvedConfigPath) {
-        return resolvedConfigPath;
-    } else {
-        throw new Error('Could not find a tsconfig.json!');
-    }
-};
-
-export const getTSConfig = async (configPath?: FilePath): Promise<FilePath> => {
-    if (configPath) {
-        fs.accessSync(configPath);
-        return path.resolve(configPath);
-    } else {
-        return await resolveTSConfig();
-    }
 };
 
 // Gets absolute paths for the files supplied via CLI
@@ -39,37 +16,6 @@ export const getTSConfig = async (configPath?: FilePath): Promise<FilePath> => {
 // Returns absolute path for file1.ts
 export const getAbsoluteFilePaths = (files: FilePath[]): FilePath[] => {
     return files.map(filename => path.resolve(filename));
-};
-
-// Creates a temporary tsconfig which extends an existing configuration
-// but overrides the included files, to include only the files specified
-// via the CLI.
-export const createTempTSConfig = async (
-    files: FilePath[],
-    configPath?: FilePath
-): Promise<FilePath | undefined> => {
-    const tempConfigFileName = crypto.randomBytes(8).toString('hex') + 'tsconfig.temp.json';
-    const tempConfigFilePath = configPath
-        ? `${path.posix.dirname(configPath)}/${tempConfigFileName}`
-        : tempConfigFileName;
-    console.log(tempConfigFilePath);
-    const writeFileCallback = (error: NodeJS.ErrnoException | null): void => {
-        if (error) {
-            throw new Error('Failed to create a temporary tsconfig!');
-        }
-    };
-    const tsConfigPath = await getTSConfig(configPath);
-    consoleLogTSConfigPath(tsConfigPath);
-    fs.writeFile(
-        tempConfigFilePath,
-        generateTempConfig(tsConfigPath, getAbsoluteFilePaths(await globby(files))),
-        writeFileCallback
-    );
-    return tempConfigFilePath;
-};
-
-export const cleanUp = (filePath: FilePath): void => {
-    fs.unlinkSync(filePath);
 };
 
 // Runs the typescript compiler using the temporary configuration
@@ -80,7 +26,8 @@ export const typeCheck = async (
     verboseMode: boolean,
     configPath?: FilePath
 ): Promise<void> => {
-    const tempConfigPath = await createTempTSConfig(files, configPath);
+    const config = new Config();
+    const tempConfigPath = await config.createTempTSConfig(files, configPath);
     try {
         if (tempConfigPath) {
             const filePaths = getAbsoluteFilePaths(await globby(files));
@@ -99,7 +46,7 @@ export const typeCheck = async (
         throw error;
     } finally {
         if (tempConfigPath) {
-            cleanUp(tempConfigPath);
+            fs.unlinkSync(tempConfigPath);
         }
     }
 };
