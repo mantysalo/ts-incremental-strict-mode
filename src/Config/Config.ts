@@ -17,7 +17,6 @@ export class Config {
         const tempConfigFilePath = configPath
             ? `${path.posix.dirname(configPath)}/${tempConfigFileName}`
             : tempConfigFileName;
-        console.log(tempConfigFilePath);
         const writeFileCallback = (error: NodeJS.ErrnoException | null): void => {
             if (error) {
                 throw new Error('Failed to create a temporary tsconfig!');
