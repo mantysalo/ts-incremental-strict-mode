@@ -20,7 +20,7 @@ describe('typeCheck', () => {
     // eslint-disable-next-line @typescript-eslint/unbound-method
     afterEach(() => (console.log = originalLog));
 
-    const cleanUpSpy = jest.spyOn(fs, 'unlinkSync').mockImplementation(jest.fn());
+    const unlinkSpy = jest.spyOn(fs, 'unlinkSync').mockImplementation(jest.fn());
     it('type checks specified file', async () => {
         // Required for this mock to work
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -29,7 +29,7 @@ describe('typeCheck', () => {
         expect(execaMock).toBeCalledWith('tsc', ['--strict', '--noEmit', '--project', 'test'], {
             all: true
         });
-        expect(cleanUpSpy).toHaveBeenCalled();
+        expect(unlinkSpy).toHaveBeenCalled();
     });
 
     it('console logs files to be typechecked in verbose mode', async () => {
@@ -42,6 +42,6 @@ describe('typeCheck', () => {
         // 'using tsconfig from path','Typechecking:' and testpath from the mock
         expect(consoleLogSpy).toBeCalledTimes(3);
         expect(consoleLogs).toContain('testpath');
-        expect(cleanUpSpy).toHaveBeenCalled();
+        expect(unlinkSpy).toHaveBeenCalled();
     });
 });
