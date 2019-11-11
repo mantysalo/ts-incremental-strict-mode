@@ -2,7 +2,9 @@
 
 > Enable TypeScript strict mode in your project incrementally!
 
-[![codecov][codecov-image]][codecov-url]
+[![codecov][codecov-image]][codecov-url] 
+[![Code Climate maintainability][codeclimate-image]][codeclimate-url]
+[![npm][npm-image]][npm-url]
 
 Enabling TypeScript strict mode in a project where it has not been enforced
 can be a painful task.
@@ -135,3 +137,7 @@ yarn test
 [codecov-image]: https://codecov.io/gh/RikuMantysalo/ts-incremental-strict-mode/branch/master/graph/badge.svg?token=cqjkqa8bw6
 [codecov-url]: https://codecov.io/gh/RikuMantysalo/ts-incremental-strict-mode
 
+[codeclimate-image]: https://img.shields.io/codeclimate/maintainability/RikuMantysalo/ts-incremental-strict-mode
+[codeclimate-url]: https://codeclimate.com/github/RikuMantysalo/ts-incremental-strict-mode
+[npm-image]: https://img.shields.io/npm/v/ts-incremental-strict-mode
+[npm-url]: https://www.npmjs.com/package/ts-incremental-strict-mode
