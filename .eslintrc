@@ -22,8 +22,6 @@
   ],
   "rules": {
     "node/no-missing-import": ["error", {
-        "allowModules": [],
-        "resolvePaths": ["/path/to/a/modules/directory"],
         "tryExtensions": [".js", ".ts", ".json", ".node"]
     }],
     "node/shebang": "off"
